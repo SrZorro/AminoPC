@@ -117,7 +117,7 @@ export default class ChatBubble extends Component<any, any> {
                 <div class={classRight}>
                     <div class={mountClassBuble.join(" ")}>
                         {this.props.who ? <p class={classUsername}>{this.props.who}</p> : null}
-                        {this.props.msg !== null ? <p>{this.props.msg}</p> : null}
+                        {this.props.msg !== null ? this.props.msg.split("\n").map(line => <p>{line}</p>) : null}
                         {this.props.picture !== null ? <img src={this.props.picture} /> : null}
                     </div>
                 </div>

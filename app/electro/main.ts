@@ -4,12 +4,16 @@ let mainWindow: Electron.BrowserWindow
 
 function onReady() {
   mainWindow = new BrowserWindow({
-    width: 800,
+    minHeight: 480,
+    minWidth: 390,
+    width: 390,
     height: 600,
     webPreferences: {
       webSecurity: false
     }
   })
+
+  // mainWindow.setMenu(null);
 
   console.log(__dirname)
   // const fileName = `file://${__dirname}/index.html`
