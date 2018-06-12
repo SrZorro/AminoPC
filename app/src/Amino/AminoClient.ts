@@ -1,8 +1,7 @@
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 import Endpoints from "./Endpoints";
 import { v4 as UUID } from "uuid";
 import * as AminoTypes from "./AminoTypes";
-import { debug } from "util";
 
 type headers = { [key: string]: string };
 
