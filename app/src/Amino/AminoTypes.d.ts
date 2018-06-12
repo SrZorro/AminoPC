@@ -101,7 +101,7 @@ export interface AminoMessage {
     author: MiniUserProfile,
     threadId: string,
     mediaType: number,
-    content: string,
+    content?: string,
     mediaValue?: string,
     clientRefId: string,
     messageId: string,

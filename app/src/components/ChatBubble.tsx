@@ -1,4 +1,5 @@
 import AminoClient from "../Amino";
+import { AminoMessage } from "../Amino/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
 
@@ -91,8 +92,15 @@ const classUsername = style({
     fontWeight: "bold"
 })
 
+interface IChatBubbleProps {
+    aminoMessage: AminoMessage,
+    left?: boolean,
+    displayProfile?: boolean,
+    displayName?: boolean
+}
+
 export default class ChatBubble extends Component<any, any> {
-    constructor(props, context) {
+    constructor(props: IChatBubbleProps, context) {
         super(props, context);
         this.state = { thread: null };
     }
@@ -112,13 +120,14 @@ export default class ChatBubble extends Component<any, any> {
         return (
             <div class={classMain}>
                 <div class={classLeft}>
-                    {this.props.profile ? <img class={classProfile} src={this.props.profile} /> : null}
+                    {this.props.displayProfile ? <img class={classProfile} src={this.props.aminoMessage.author.icon} /> : null}
                 </div>
                 <div class={classRight}>
                     <div class={mountClassBuble.join(" ")}>
-                        {this.props.who ? <p class={classUsername}>{this.props.who}</p> : null}
-                        {this.props.msg !== null ? this.props.msg.split("\n").map(line => <p>{line}</p>) : null}
-                        {this.props.picture !== null ? <img src={this.props.picture} /> : null}
+                        {this.props.displayName ? <p class={classUsername}>{this.props.aminoMessage.author.nickname}</p> : null}
+                        {this.props.aminoMessage.content ? this.props.aminoMessage.content.split("\n").map(line => <p>{line}</p>) : null}
+                        {this.props.aminoMessage.mediaValue && (this.props.aminoMessage.mediaType === 113 || this.props.aminoMessage.mediaType === 100) && !this.props.aminoMessage.mediaValue.includes("ndcsticker://") ? <img src={this.props.aminoMessage.mediaValue} /> : null}
+                        {this.props.aminoMessage.mediaType == 103 ? <iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe> : null}
                     </div>
                 </div>
             </div>

@@ -157,13 +157,13 @@ export default class ThreadChat extends Component<any, any> {
                 const nextMessage: AminoMessage | null = index >= messages.length - 1 ? null : messages[index + 1];
 
                 if ((prevMessage !== null && prevMessage.author.uid !== message.author.uid) && (nextMessage === null || message.author.uid !== nextMessage.author.uid))
-                    return chatBubbles.push(<ChatBubble left={true} who={message.author.nickname} profile={message.author.icon} msg={message.mediaType === 0 ? message.content : null} picture={message.mediaType === 100 ? message.mediaValue : null} />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayName displayProfile />)
                 if (prevMessage !== null && prevMessage.author.uid !== message.author.uid)
-                    return chatBubbles.push(<ChatBubble left={true} who={message.author.nickname} msg={message.mediaType === 0 ? message.content : null} picture={message.mediaType === 100 ? message.mediaValue : null} />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayName />)
                 if (nextMessage === null || message.author.uid !== nextMessage.author.uid)
-                    return chatBubbles.push(<ChatBubble left={true} profile={message.author.icon} msg={message.mediaType === 0 ? message.content : null} picture={message.mediaType === 100 ? message.mediaValue : null} />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayProfile />)
                 if (prevMessage !== null && prevMessage.author.uid === message.author.uid)
-                    return chatBubbles.push(<ChatBubble left={true} msg={message.mediaType === 0 ? message.content : null} picture={message.mediaType === 100 ? message.mediaValue : null} />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left />)
             });
 
         return (
