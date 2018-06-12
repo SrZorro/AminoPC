@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"allowJs": false,
+		"module": "es6",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"lib": [
+			"es6",
+			"es7",
+			"dom"
+		],
+		"types": [
+			"inferno"
+		],
+		"jsx": "preserve",
+		// "noUnusedLocals": true,
+		"strictNullChecks": true,
+		"removeComments": false
+	},
+	"include": [
+		"app/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	],
+	"compileOnSave": false
+}

@@ -1,0 +1,35 @@
+{
+  "name": "amino",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main_process.js",
+  "scripts": {
+    "build": "webpack",
+    "electron": "electron ./build/main.js",
+    "start": "webpack-dev-server --config webpack.config.js --inline --watch"
+  },
+  "author": "fox@foxdev.io",
+  "license": "MIT",
+  "dependencies": {
+    "@types/electron": "^1.6.10",
+    "@types/node": "^10.3.2",
+    "@types/node-fetch": "^2.1.1",
+    "@types/uuid": "^3.4.3",
+    "inferno": "^4.0.2",
+    "ts-node": "^6.1.0",
+    "typescript": "^2.9.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.17",
+    "electron": "2.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "moment": "^2.22.2",
+    "ts-loader": "^4.4.1",
+    "ts-transform-inferno": "^2.2.0",
+    "typestyle": "^2.0.1",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.3",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
