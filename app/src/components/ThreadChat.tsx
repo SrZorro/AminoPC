@@ -100,11 +100,13 @@ const classArrow = style({
 
 export default class ThreadChat extends Component<any, any> {
     private updateInterval: number;
+    private shouldUpdate: boolean;
     private autoScroll: boolean;
     private dummyBottomDiv: HTMLElement | null;
     constructor(props, context) {
         super(props, context);
         this.state = { thread: null, threadMessages: null };
+        this.shouldUpdate = true;
         this.autoScroll = true;
         this.dummyBottomDiv = null;
     }
@@ -126,6 +128,7 @@ export default class ThreadChat extends Component<any, any> {
 
     public componentWillUnmount() {
         clearInterval(this.updateInterval);
+        this.shouldUpdate = false;
     }
 
     private async updateLoop() {
@@ -136,7 +139,8 @@ export default class ThreadChat extends Component<any, any> {
         //@ts-ignore
         thread.reverse();
         this.setState({ threadMessages: thread });
-        this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
+        if (this.shouldUpdate)
+            this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
     }
 
     private sendMessage(evt: any) {
@@ -174,12 +178,6 @@ export default class ThreadChat extends Component<any, any> {
                 </div>
                 <div class={classBody}>
                     {chatBubbles}
-                    {/* <ChatBubble left={true} who="Alex Fp" msg="Cuando te dicen a ti sacar a la perra y vas sin ganas pero tu perra va con menos ganas" date="2018-06-10T17:01:15Z" />
-                    <ChatBubble left={true} msg="Y va directa hacia casa, la suelto y seguro que va" date="2018-06-10T17:02:01Z" />
-                    <ChatBubble left={true} who="Irene" msg="fox" date="2018-06-10T17:02:16Z" />
-                    <ChatBubble left={true} msg="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vulputate eros quis nisl egestas sagittis a quis leo. Sed vulputate egestas aliquet. Class aptent" date="2018-06-10T17:02:46Z" />
-                    <ChatBubble left={true} msg="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vulputate eros quis nisl egestas sagittis a quis leo. Sed vulputate egestas aliquet. Class aptent" date="2018-06-10T17:02:52Z" />
-                    <ChatBubble left={false} msg="Okey" date="2018-06-10T17:03:12Z" /> */}
                     <div ref={(el) => { this.dummyBottomDiv = el; }}>
                     </div>
                 </div>

@@ -50,12 +50,12 @@ const mainHover = style({
     }
 })
 
-let avatarCounter = 0;
-
 export default class Threads extends Component<any, any> {
     private updateInterval: number;
+    private shouldUpdate: boolean;
     constructor(props, context) {
         super(props, context);
+        this.shouldUpdate = true;
         this.state = { isHovering: false, threadList: [] };
     }
 
@@ -65,6 +65,7 @@ export default class Threads extends Component<any, any> {
 
     public componentWillUnmount() {
         clearInterval(this.updateInterval);
+        this.shouldUpdate = false;
     }
 
     private async updateLoop() {
@@ -85,7 +86,8 @@ export default class Threads extends Component<any, any> {
 
         //@ts-ignore
         this.setState({ threadList: threadList });
-        this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
+        if (this.shouldUpdate)
+            this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
     }
 
     private openThread(threadId) {
