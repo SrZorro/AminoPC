@@ -1,6 +1,7 @@
 import { AminoMessage } from "../Amino/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
+import moment from "moment";
 
 const classMain = style({
     width: "100%",
@@ -21,7 +22,7 @@ const classRight = style({
     width: "calc(100% - 56px)",
     marginRight: 10,
     float: "right",
-    paddingBottom: 4
+    paddingBottom: 4,
 })
 
 const classProfile = style({
@@ -69,14 +70,16 @@ const classBubbleLeftArrow = style({
 
 const classBubbleRight = style({
     backgroundColor: "#3B3C38",
-    boxShadow: "0px 2px 0px 0px #2C4F2B"
+    boxShadow: "0px 2px 0px 0px #2C4F2B",
+    float: "right",
+    marginRight: "0 !important"
 })
 const classBubbleRightArrow = style({
     $nest: {
-        "&::before": {
+        "&::after": {
             content: "''",
             float: "right",
-            transform: "translate(12px, calc(100% + 9px))",
+            transform: "translate(64px, 10px)",
             boxShadow: "0px 2px 0px 0px #2C4F2B",
             width: 0,
             height: 0,
@@ -93,6 +96,13 @@ const classUsername = style({
 
 const classPicture = style({
     width: "100%"
+})
+
+const classTime = style({
+    color: "#717D85",
+    marginTop: -5,
+    float: "right",
+    fontSize: "0.8em"
 })
 
 interface IChatBubbleProps {
@@ -140,10 +150,12 @@ export default class ChatBubble extends Component<any, any> {
                     break;
             }
         }
+
+        ctx.push(<p style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>)
         return (
             <div class={classMain}>
                 <div class={classLeft}>
-                    {this.props.displayProfile ? <img class={classProfile} src={this.props.aminoMessage.author.icon} /> : null}
+                    {this.props.displayProfile && this.props.left ? <img class={classProfile} src={this.props.aminoMessage.author.icon} /> : null}
                 </div>
                 <div class={classRight}>
                     <div class={mountClassBuble.join(" ")}>

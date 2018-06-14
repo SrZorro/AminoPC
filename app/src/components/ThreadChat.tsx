@@ -98,6 +98,22 @@ const classArrow = style({
     cursor: "pointer"
 })
 
+const classScrollBtn = style({
+    position: "absolute",
+    cursor: "pointer",
+    width: 40,
+    height: 40,
+    right: 0,
+    transform: "translate(-24px, calc(-40px - 20px))",
+    backgroundColor: "#434D57",
+    borderRadius: "50%",
+    transition: ".2s linear opacity"
+})
+
+const classScrollBtnIcon = style({
+    color: "white"
+})
+
 export default class ThreadChat extends Component<any, any> {
     private updateInterval: number;
     private shouldUpdate: boolean;
@@ -117,13 +133,15 @@ export default class ThreadChat extends Component<any, any> {
 
     public componentDidUpdate() {
         if (this.autoScroll) {
-            this.scrollToBottom();
+            //Defer scroll til DOMRender happens
+            setTimeout(() => requestAnimationFrame(() => this.scrollToBottom(true)), 0);
+            this.autoScroll = false;
         }
     }
 
-    private scrollToBottom() {
+    private scrollToBottom(instant: boolean) {
         if (this.dummyBottomDiv !== null)
-            this.dummyBottomDiv.scrollIntoView({ behavior: "smooth" })
+            this.dummyBottomDiv.scrollIntoView({ behavior: instant ? "instant" : "smooth" })
     }
 
     public componentWillUnmount() {
@@ -161,13 +179,13 @@ export default class ThreadChat extends Component<any, any> {
                 const nextMessage: AminoMessage | null = index >= messages.length - 1 ? null : messages[index + 1];
 
                 if ((prevMessage !== null && prevMessage.author.uid !== message.author.uid) && (nextMessage === null || message.author.uid !== nextMessage.author.uid))
-                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayName displayProfile />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} displayName displayProfile />)
                 if (prevMessage !== null && prevMessage.author.uid !== message.author.uid)
-                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayName />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} displayName />)
                 if (nextMessage === null || message.author.uid !== nextMessage.author.uid)
-                    return chatBubbles.push(<ChatBubble aminoMessage={message} left displayProfile />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} displayProfile />)
                 if (prevMessage !== null && prevMessage.author.uid === message.author.uid)
-                    return chatBubbles.push(<ChatBubble aminoMessage={message} left />)
+                    return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} />)
             });
 
         return (
@@ -178,9 +196,9 @@ export default class ThreadChat extends Component<any, any> {
                 </div>
                 <div class={classBody}>
                     {chatBubbles}
-                    <div ref={(el) => { this.dummyBottomDiv = el; }}>
-                    </div>
+                    <div ref={(el) => { this.dummyBottomDiv = el; }}></div>
                 </div>
+                {<div style={this.props.showScrollBtn ? { opacity: 1 } : { opacity: 0 }} class={classScrollBtn} onclick={() => this.scrollToBottom(false)}><svg class={classScrollBtnIcon} viewBox="0 0 512 512"><path style={{ transform: "translate(90px, 125px)" }} fill="currentColor" d="M314.5,90.5c0,6-2,13-7,18l-133,133c-5,5-10,7-17,7s-12-2-17-7l-133-133c-10-10-10-25,0-35 s24-10,34,0l116,116l116-116c10-10,24-10,34,0C312.5,78.5,314.5,84.5,314.5,90.5z"></path></svg></div>}
                 <div class={classFooter}>
                     <div class={classFooterLeft}><svg class={classFooterIcon} viewBox="0 0 512 512"><path fill="currentColor" d="M67.508 468.467c-58.005-58.013-58.016-151.92 0-209.943l225.011-225.04c44.643-44.645 117.279-44.645 161.92 0 44.743 44.749 44.753 117.186 0 161.944l-189.465 189.49c-31.41 31.413-82.518 31.412-113.926.001-31.479-31.482-31.49-82.453 0-113.944L311.51 110.491c4.687-4.687 12.286-4.687 16.972 0l16.967 16.971c4.685 4.686 4.685 12.283 0 16.969L184.983 304.917c-12.724 12.724-12.73 33.328 0 46.058 12.696 12.697 33.356 12.699 46.054-.001l189.465-189.489c25.987-25.989 25.994-68.06.001-94.056-25.931-25.934-68.119-25.932-94.049 0l-225.01 225.039c-39.249 39.252-39.258 102.795-.001 142.057 39.285 39.29 102.885 39.287 142.162-.028A739446.174 739446.174 0 0 1 439.497 238.49c4.686-4.687 12.282-4.684 16.969.004l16.967 16.971c4.685 4.686 4.689 12.279.004 16.965a755654.128 755654.128 0 0 0-195.881 195.996c-58.034 58.092-152.004 58.093-210.048.041z"></path></svg></div>
                     <div class={classFooterMiddle}><textarea type="text" placeholder="Write a message..." class={classFooterInput} onKeyDown={(evt) => { this.sendMessage(evt) }}></textarea></div>
