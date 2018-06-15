@@ -1,7 +1,7 @@
-import AminoClient from "../Amino";
 import { AminoMessage } from "../Amino/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
+import moment from "moment";
 
 const classMain = style({
     width: "100%",
@@ -22,7 +22,7 @@ const classRight = style({
     width: "calc(100% - 56px)",
     marginRight: 10,
     float: "right",
-    paddingBottom: 4
+    paddingBottom: 4,
 })
 
 const classProfile = style({
@@ -39,13 +39,16 @@ const classBubble = style({
     minHeight: 33 - 5 - 10,
     display: "table-cell",
     verticalAlign: "middle",
-    paddingRight: 10
-    // $nest: {
-    //     "&::after": {
-    //         content: "' '",
-    //         position: "absolute",
-    //     }
-    // }
+    paddingRight: 10,
+    $nest: {
+        p: {
+            $nest: {
+                "&:nth-last-of-type(2)": {
+                    float: "left"
+                }
+            }
+        }
+    }
 })
 
 const classBubbleLeft = style({
@@ -70,14 +73,16 @@ const classBubbleLeftArrow = style({
 
 const classBubbleRight = style({
     backgroundColor: "#3B3C38",
-    boxShadow: "0px 2px 0px 0px #2C4F2B"
+    boxShadow: "0px 2px 0px 0px #2C4F2B",
+    float: "right",
+    marginRight: "0 !important"
 })
 const classBubbleRightArrow = style({
     $nest: {
-        "&::before": {
+        "&::after": {
             content: "''",
             float: "right",
-            transform: "translate(12px, calc(100% + 9px))",
+            transform: "translate(69px, 19px)",
             boxShadow: "0px 2px 0px 0px #2C4F2B",
             width: 0,
             height: 0,
@@ -92,8 +97,19 @@ const classUsername = style({
     fontWeight: "bold"
 })
 
+const classParagraph = style({
+})
+
 const classPicture = style({
     width: "100%"
+})
+
+const classTime = style({
+    color: "#717D85",
+    marginLeft: 5,
+    marginTop: 4,
+    float: "right",
+    fontSize: "0.8em"
 })
 
 interface IChatBubbleProps {
@@ -121,17 +137,36 @@ export default class ChatBubble extends Component<any, any> {
         if (!this.props.left)
             mountClassBuble.push(classBubbleRightArrow);
 
+        const ctx: HTMLElement[] = [];
+
+        if (this.props.displayName)
+            ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>)
+
+        if (this.props.aminoMessage.content)
+            this.props.aminoMessage.content.split("\n").map(line => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>))
+
+        if (this.props.aminoMessage.mediaValue) {
+            switch (this.props.aminoMessage.mediaType) {
+                case 113:
+                case 100:
+                    if (!this.props.aminoMessage.mediaValue.includes("ndcsticker://"))
+                        ctx.push(<img class={classPicture} src={this.props.aminoMessage.mediaValue} />);
+                    break;
+                case 103:
+                    ctx.push(<iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe>);
+                    break;
+            }
+        }
+
+        ctx.push(<p style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>)
         return (
             <div class={classMain}>
                 <div class={classLeft}>
-                    {this.props.displayProfile ? <img class={classProfile} src={this.props.aminoMessage.author.icon} /> : null}
+                    {this.props.displayProfile && this.props.left ? <img class={classProfile} src={this.props.aminoMessage.author.icon} /> : null}
                 </div>
                 <div class={classRight}>
                     <div class={mountClassBuble.join(" ")}>
-                        {this.props.displayName ? <p class={classUsername}>{this.props.aminoMessage.author.nickname}</p> : null}
-                        {this.props.aminoMessage.content ? this.props.aminoMessage.content.split("\n").map(line => <p>{line}</p>) : null}
-                        {this.props.aminoMessage.mediaValue && (this.props.aminoMessage.mediaType === 113 || this.props.aminoMessage.mediaType === 100) && !this.props.aminoMessage.mediaValue.includes("ndcsticker://") ? <img class={classPicture} src={this.props.aminoMessage.mediaValue} /> : null}
-                        {this.props.aminoMessage.mediaType == 103 ? <iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe> : null}
+                        {ctx}
                     </div>
                 </div>
             </div>

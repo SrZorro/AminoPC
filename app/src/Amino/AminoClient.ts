@@ -25,14 +25,13 @@ class AminoClient {
     private deviceId: string;
     public isLogged: boolean;
     public onLogged: Function[];
-    public store: object;
+    public uid: string;
     constructor(email: string, password: string, deviceId: string) {
         this.email = email;
         this.password = password;
         this.deviceId = deviceId;
         this.isLogged = false;
         this.onLogged = [];
-        this.store = {};
     }
 
     public async login() {
@@ -59,6 +58,7 @@ class AminoClient {
             throw Error("Incorrect Login");
 
         this.sid = result.sid;
+        this.uid = result.account.uid;
 
         this.isLogged = true;
         this.onLogged.map((onLogged) => {
