@@ -42,7 +42,7 @@ function generate_endpoints() {
 
 		// ===[ CHAT ENDPOINTS ]===
 		COMMUNITY_THREAD: PREFIX + "/x{0}/s/chat/thread/{1}",
-		COMMUNITY_CHAT_THREAD: PREFIX + "/{0}/s/chat/thread?type={1}&start={2}&size={3}&cv={4}",
+		COMMUNITY_CHAT_THREAD: PREFIX + "/{0}/s/chat/thread?type={1}&start={2}&size={3}",
 		COMMUNITY_JOIN_CHAT_THREAD: PREFIX + "/{0}/s/chat/thread/{1}/member/{2}",
 		COMMUNITY_CHAT_SEND_MESSAGE: PREFIX + "/x{0}/s/chat/thread/{1}/message",
 		COMMUNITY_CHAT_GET_MESSAGES: PREFIX + "/x{0}/s/chat/thread/{1}/message?start={2}&size={3}",
