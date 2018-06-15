@@ -39,13 +39,16 @@ const classBubble = style({
     minHeight: 33 - 5 - 10,
     display: "table-cell",
     verticalAlign: "middle",
-    paddingRight: 10
-    // $nest: {
-    //     "&::after": {
-    //         content: "' '",
-    //         position: "absolute",
-    //     }
-    // }
+    paddingRight: 10,
+    $nest: {
+        p: {
+            $nest: {
+                "&:nth-last-of-type(2)": {
+                    float: "left"
+                }
+            }
+        }
+    }
 })
 
 const classBubbleLeft = style({
@@ -79,7 +82,7 @@ const classBubbleRightArrow = style({
         "&::after": {
             content: "''",
             float: "right",
-            transform: "translate(64px, 10px)",
+            transform: "translate(69px, 19px)",
             boxShadow: "0px 2px 0px 0px #2C4F2B",
             width: 0,
             height: 0,
@@ -94,13 +97,17 @@ const classUsername = style({
     fontWeight: "bold"
 })
 
+const classParagraph = style({
+})
+
 const classPicture = style({
     width: "100%"
 })
 
 const classTime = style({
     color: "#717D85",
-    marginTop: -5,
+    marginLeft: 5,
+    marginTop: 4,
     float: "right",
     fontSize: "0.8em"
 })
@@ -136,7 +143,7 @@ export default class ChatBubble extends Component<any, any> {
             ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>)
 
         if (this.props.aminoMessage.content)
-            this.props.aminoMessage.content.split("\n").map(line => ctx.push(<p>{line}</p>))
+            this.props.aminoMessage.content.split("\n").map(line => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>))
 
         if (this.props.aminoMessage.mediaValue) {
             switch (this.props.aminoMessage.mediaType) {
