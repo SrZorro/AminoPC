@@ -92,6 +92,10 @@ const classUsername = style({
     fontWeight: "bold"
 })
 
+const classPicture = style({
+    width: "100%"
+})
+
 interface IChatBubbleProps {
     aminoMessage: AminoMessage,
     left?: boolean,
@@ -126,7 +130,7 @@ export default class ChatBubble extends Component<any, any> {
                     <div class={mountClassBuble.join(" ")}>
                         {this.props.displayName ? <p class={classUsername}>{this.props.aminoMessage.author.nickname}</p> : null}
                         {this.props.aminoMessage.content ? this.props.aminoMessage.content.split("\n").map(line => <p>{line}</p>) : null}
-                        {this.props.aminoMessage.mediaValue && (this.props.aminoMessage.mediaType === 113 || this.props.aminoMessage.mediaType === 100) && !this.props.aminoMessage.mediaValue.includes("ndcsticker://") ? <img src={this.props.aminoMessage.mediaValue} /> : null}
+                        {this.props.aminoMessage.mediaValue && (this.props.aminoMessage.mediaType === 113 || this.props.aminoMessage.mediaType === 100) && !this.props.aminoMessage.mediaValue.includes("ndcsticker://") ? <img class={classPicture} src={this.props.aminoMessage.mediaValue} /> : null}
                         {this.props.aminoMessage.mediaType == 103 ? <iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe> : null}
                     </div>
                 </div>
