@@ -75,8 +75,13 @@ class AminoClient {
         return await this.get(Endpoints.JOINED_COMMUNITIES.format(start.toString(), size.toString()));
     }
 
-    public async getPublicChats(ndcId: number, start: number, size: number): Promise<AminoTypes.PublicChats> {
-        return await this.get(Endpoints.LIVE_LAYERS_PUBLIC_CHAT.format(ndcId.toString(), start.toString(), size.toString()));
+    public async getPublicChats(ndcId: number, start: number, size: number): Promise<AminoTypes.AminoThread[]> {
+        const response = await this.get(Endpoints.LIVE_LAYERS_PUBLIC_CHAT.format(ndcId.toString(), start.toString(), size.toString()));
+        return response.threadList;
+    }
+
+    public async getJoinedChats(ndcId: number, start: number, size: number): Promise<AminoTypes.AminoThread[]> {
+        return await this.get(Endpoints.COMMUNITY_CHAT_THREAD.format(ndcId.toString(), "joined-me", start.toString(), size.toString()));
     }
 
     public async getThreadMessages(ndcId: number, threadId: string, start: number, size: number, startTime?: string): Promise<AminoTypes.AminoMessage[]> {
@@ -102,6 +107,30 @@ class AminoClient {
                 "NDCAUTH": `sid=${this.sid}`,
                 "NDC-MSG-SIG": this.getMessageSignature()
             })
+        return msg;
+    }
+
+    public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: "jpg" | "gif" | "audio"): Promise<AminoTypes.AminoMessage> {
+        const body = {
+            type: mediaType === "audio" ? 2 : 0,
+            clientRefId: Math.round((new Date).getTime() / 1000),
+            mediaType: mediaType === "audio" ? 110 : 100,
+            content: null,
+            mediaUploadValue: mediaB64,
+            attachedObject: null,
+            timestamp: Math.round((new Date).getTime() / 1000)
+        };
+        if (mediaType === "jpg" || mediaType === "gif") {
+            //@ts-ignore
+            body.mediaUhqEnabled = false; //High quality maybe? 
+            //@ts-ignore
+            body.mediaUploadValueContentType = `image/${mediaType}`;
+        }
+
+        const msg = await this.post(Endpoints.COMMUNITY_CHAT_SEND_MESSAGE.format(ndcId.toString(), threadId), body, {
+            "NDCDEVICEID": this.deviceId,
+            "NDCAUTH": `sid=${this.sid}`
+        })
         return msg;
     }
 
