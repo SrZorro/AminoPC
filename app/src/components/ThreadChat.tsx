@@ -151,12 +151,12 @@ export default class ThreadChat extends Component<any, any> {
 
     private async updateLoop() {
         console.log("Upading thread...");
-        const thread = await AminoClient.getThreadMessages(this.props.ndcId, this.props.threadId, 0, 100);
+        const messageList = await AminoClient.getThreadMessages(this.props.ndcId, this.props.threadId, 0, 100);
 
-        console.log(thread);
+        console.log(messageList);
         //@ts-ignore
-        thread.reverse();
-        this.setState({ threadMessages: thread });
+        messageList.reverse();
+        this.setState({ threadMessages: messageList });
         if (this.shouldUpdate)
             this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
     }
