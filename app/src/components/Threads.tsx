@@ -56,7 +56,7 @@ export default class Threads extends Component<any, any> {
     constructor(props, context) {
         super(props, context);
         this.shouldUpdate = true;
-        this.state = { isHovering: false, threadList: [] };
+        this.state = { isHovering: false, threadList: [], joinedThreadList: [] };
     }
 
     public async componentWillMount() {
@@ -70,13 +70,13 @@ export default class Threads extends Component<any, any> {
 
     private async updateLoop() {
         console.log("Upading list...");
-        const publicChats = await AminoClient.getPublicChats(this.props.ndcId, 0, 50);
+        let publicThreadList = await AminoClient.getPublicChats(this.props.ndcId, 0, 50);
         //Remove null threads
-        const threadList = publicChats.threadList.filter((thread) => {
+        publicThreadList = publicThreadList.filter((thread) => {
             return thread.status === 0
         });
         //Sort by date
-        threadList.sort((a, b) => {
+        publicThreadList.sort((a, b) => {
             const ta = new Date(a.lastMessageSummary.createdTime);
             const tb = new Date(b.lastMessageSummary.createdTime);
             if (ta < tb) return 1;
@@ -84,8 +84,10 @@ export default class Threads extends Component<any, any> {
             return 0;
         })
 
+        let joinedThreadList = await AminoClient.getJoinedChats(this.props.ndcId, 0, 15);
+        console.log(joinedThreadList);
         //@ts-ignore
-        this.setState({ threadList: threadList });
+        this.setState({ threadList: publicThreadList, joinedThreadList });
         if (this.shouldUpdate)
             this.updateInterval = window.setTimeout(() => { this.updateLoop() }, 3000);
     }
@@ -98,24 +100,14 @@ export default class Threads extends Component<any, any> {
         //Scrollbar
         let classes = main;
         if (this.state.isHovering) classes += " " + mainHover;
-
-        let hasJoinedThreads = false;
-
-        this.state.threadList.map((thread) => {
-            if (thread.membershipStatus >= 1)
-                hasJoinedThreads = true;
-        });
-
-
         return (
             <div className={classes} onMouseEnter={() => { this.setState({ isHovering: true }) }} onMouseLeave={() => { this.setState({ isHovering: false }) }}>
-                {this.state.threadList.map(thread => {
-                    if (thread.membershipStatus >= 1)
-                        return ([
-                            <ThreadElement thread={thread} onClick={this.openThread.bind(this)} />
-                        ])
+                {this.state.joinedThreadList.map(thread => {
+                    return ([
+                        <ThreadElement thread={thread} onClick={this.openThread.bind(this)} />
+                    ])
                 })}
-                {hasJoinedThreads ? <hr /> : null}
+                {this.state.joinedThreadList.length > 0 ? <hr /> : null}
                 {this.state.threadList.map(thread => {
                     if (thread.membershipStatus < 1)
                         return ([
