@@ -142,6 +142,9 @@ export default class ChatBubble extends Component<any, any> {
         if (this.props.displayName)
             ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>)
 
+        //ToDo - Handle user joined chat
+        // type: 101
+
         if (this.props.aminoMessage.content)
             this.props.aminoMessage.content.split("\n").map(line => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>))
 
