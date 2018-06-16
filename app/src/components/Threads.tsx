@@ -69,7 +69,6 @@ export default class Threads extends Component<any, any> {
     }
 
     private async updateLoop() {
-        console.log("Upading list...");
         let publicThreadList = await AminoClient.getPublicChats(this.props.ndcId, 0, 50);
         //Remove null threads
         publicThreadList = publicThreadList.filter((thread) => {
@@ -85,7 +84,6 @@ export default class Threads extends Component<any, any> {
         })
 
         let joinedThreadList = await AminoClient.getJoinedChats(this.props.ndcId, 0, 15);
-        console.log(joinedThreadList);
         //@ts-ignore
         this.setState({ threadList: publicThreadList, joinedThreadList });
         if (this.shouldUpdate)
