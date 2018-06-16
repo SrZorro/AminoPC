@@ -81,7 +81,8 @@ class AminoClient {
     }
 
     public async getJoinedChats(ndcId: number, start: number, size: number): Promise<AminoTypes.AminoThread[]> {
-        return await this.get(Endpoints.COMMUNITY_CHAT_THREAD.format(ndcId.toString(), "joined-me", start.toString(), size.toString()));
+        const response = await this.get(Endpoints.COMMUNITY_CHAT_THREAD.format(ndcId.toString(), "joined-me", start.toString(), size.toString()));
+        return response.threadList;
     }
 
     public async getThreadMessages(ndcId: number, threadId: string, start: number, size: number, startTime?: string): Promise<AminoTypes.AminoMessage[]> {
