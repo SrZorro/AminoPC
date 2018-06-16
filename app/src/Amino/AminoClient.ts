@@ -1,4 +1,4 @@
-// import fetch from "node-fetch";
+import fetch from "cross-fetch";
 import Endpoints from "./Endpoints";
 import { v4 as UUID } from "uuid";
 import * as AminoTypes from "./AminoTypes";
@@ -110,7 +110,7 @@ class AminoClient {
         return msg;
     }
 
-    public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: "jpg" | "gif" | "audio"): Promise<AminoTypes.AminoMessage> {
+    public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: "png" | "jpg" | "gif" | "audio"): Promise<AminoTypes.AminoMessage> {
         const body = {
             type: mediaType === "audio" ? 2 : 0,
             clientRefId: Math.round((new Date).getTime() / 1000),
@@ -120,7 +120,8 @@ class AminoClient {
             attachedObject: null,
             timestamp: Math.round((new Date).getTime() / 1000)
         };
-        if (mediaType === "jpg" || mediaType === "gif") {
+        //Note: PNG support is kinda wroken, its converted to jpg and creates artefacts where transparency was located.
+        if (mediaType === "jpg" || mediaType === "gif" || mediaType === "png") {
             //@ts-ignore
             body.mediaUhqEnabled = false; //High quality maybe? 
             //@ts-ignore
