@@ -110,23 +110,22 @@ class AminoClient {
             })
         return msg;
     }
-
-    public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: "png" | "jpg" | "gif" | "audio"): Promise<AminoTypes.AminoMessage> {
+    public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: string): Promise<AminoTypes.AminoMessage> {
         const body = {
-            type: mediaType === "audio" ? 2 : 0,
+            type: mediaType.includes("audio") ? 2 : 0,
             clientRefId: Math.round((new Date).getTime() / 1000),
-            mediaType: mediaType === "audio" ? 110 : 100,
+            mediaType: mediaType.includes("audio") ? 110 : 100,
             content: null,
             mediaUploadValue: mediaB64,
             attachedObject: null,
             timestamp: Math.round((new Date).getTime() / 1000)
         };
         //Note: PNG support is kinda wroken, its converted to jpg and creates artefacts where transparency was located.
-        if (mediaType === "jpg" || mediaType === "gif" || mediaType === "png") {
+        if (mediaType.includes("image")) {
             //@ts-ignore
             body.mediaUhqEnabled = false; //High quality maybe? 
             //@ts-ignore
-            body.mediaUploadValueContentType = `image/${mediaType}`;
+            body.mediaUploadValueContentType = mediaType;
         }
 
         const msg = await this.post(Endpoints.COMMUNITY_CHAT_SEND_MESSAGE.format(ndcId.toString(), threadId), body, {
