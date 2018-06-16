@@ -17,7 +17,7 @@ function onReady() {
 
   console.log(__dirname)
   // const fileName = `file://${__dirname}/index.html`
-  mainWindow.loadURL("http://localhost:8080")
+  mainWindow.loadURL("http://localhost:8000")
   mainWindow.on("close", () => app.quit())
 }
 
