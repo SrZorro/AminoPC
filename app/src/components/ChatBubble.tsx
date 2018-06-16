@@ -153,7 +153,12 @@ export default class ChatBubble extends Component<any, any> {
                         ctx.push(<img class={classPicture} src={this.props.aminoMessage.mediaValue} />);
                     break;
                 case 103:
+                    //ToDo - Fix width
                     ctx.push(<iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe>);
+                    break;
+                case 110:
+                    //ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
+                    ctx.push(<audio controls><source src={this.props.aminoMessage.mediaValue} type="audio/aac" /></audio>);
                     break;
             }
         }
