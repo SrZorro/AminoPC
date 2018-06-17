@@ -2,6 +2,7 @@ import AminoClient from "../Amino";
 import { Component } from "inferno";
 import Threads from "./Threads";
 import ThreadChat from "./ThreadChat";
+import Login from "./Login";
 
 const style = {
     width: "100%",
@@ -12,16 +13,15 @@ const style = {
 export default class Amino extends Component<any, any> {
     constructor(props, context) {
         super(props, context);
-        this.state = { ndcId: null, threadId: null, scene: "ThreadList" };
+        this.state = { ndcId: null, threadId: null, scene: "login" };
+    }
 
-        AminoClient.login();
-        AminoClient.onLogged.push(async () => {
-            console.log("Logged, Requesting joined coms");
-            const joinedComs = await AminoClient.getJoinedCommunities(0, 10);
-            this.setState({
-                ndcId: joinedComs.communityList[0].ndcId,
-                threadId: "xyz"
-            })
+    private async onLogged() {
+        console.log("Logged, Requesting joined coms");
+        const joinedComs = await AminoClient.getJoinedCommunities(0, 10);
+        this.setState({
+            scene: "ThreadList",
+            ndcId: joinedComs.communityList[0].ndcId
         })
     }
 
@@ -32,12 +32,16 @@ export default class Amino extends Component<any, any> {
     public render() {
         let display = <div style={{ color: "white", fontSize: "2em" }}>Loading...</div>;
 
+        if (this.state.scene === "login") {
+            display = <Login onLogged={this.onLogged.bind(this)} />
+        }
+
         if (this.state.scene === "ThreadList" && this.state.ndcId !== null) {
             display = <Threads ndcId={this.state.ndcId} changeScene={this.changeScene.bind(this)} />
         }
 
         if (this.state.scene === "ThreadChat" && this.state.threadId !== null) {
-            display = <ThreadChat ndcId={this.state.ndcId} threadId={this.state.threadId} changeScene={this.changeScene.bind(this)}/>;
+            display = <ThreadChat ndcId={this.state.ndcId} threadId={this.state.threadId} changeScene={this.changeScene.bind(this)} />;
         }
 
         return (
