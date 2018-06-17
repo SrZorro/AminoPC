@@ -183,7 +183,6 @@ export default class Amino extends Component<any, any> {
                 return (
                     <div class={main}>
                         {logo}
-                        <h1 class={classHeader}>Login with your credentials</h1>
                         <div class={classInputContainer}>
                             <br />
                             <input class={classInput} type="email" required defaultValue={this.defaultEmail} />
