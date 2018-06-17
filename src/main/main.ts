@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow } from "electron";
+import * as path from "path";
 declare var __dirname: string
 let mainWindow: Electron.BrowserWindow
 
@@ -17,7 +18,7 @@ function onReady() {
 
   console.log(__dirname)
   // const fileName = `file://${__dirname}/index.html`
-  mainWindow.loadURL("http://localhost:8000")
+  mainWindow.loadURL(process.env.DEBUG ? "http://localhost:8000" : path.join(__dirname, "..", "src", "index.html"))
   mainWindow.on("close", () => app.quit())
 }
 
