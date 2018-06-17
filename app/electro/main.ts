@@ -4,10 +4,10 @@ let mainWindow: Electron.BrowserWindow
 
 function onReady() {
   mainWindow = new BrowserWindow({
-    minHeight: 480,
+    minHeight: 700,
     minWidth: 390,
     width: 390,
-    height: 600,
+    height: 700,
     webPreferences: {
       webSecurity: false
     }
