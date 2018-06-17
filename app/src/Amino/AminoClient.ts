@@ -20,25 +20,21 @@ String.prototype.format = function () {
 
 class AminoClient {
     private sid: string;
-    private email: string;
-    private password: string;
     private deviceId: string;
     public isLogged: boolean;
     public onLogged: Function[];
     public uid: string;
-    constructor(email: string, password: string, deviceId: string) {
-        this.email = email;
-        this.password = password;
-        this.deviceId = deviceId;
+    constructor() {
         this.isLogged = false;
         this.onLogged = [];
     }
 
-    public async login() {
+    public async login(email: string, password: string, deviceId: string) {
+        this.deviceId = deviceId;
         const body = {
-            email: this.email,
-            secret: `0 ${this.password}`,
-            deviceID: this.deviceId,
+            email: email,
+            secret: `0 ${password}`,
+            deviceID: deviceId,
             clientType: 100,
             action: "normal",
             timestamp: Math.round((new Date).getTime() / 1000)
@@ -51,11 +47,15 @@ class AminoClient {
 
         const statusCode = result["api:statuscode"];
 
-        if (statusCode == 214)
-            throw Error("Invalid Password");
-
-        if (statusCode == 200)
-            throw Error("Incorrect Login");
+        switch (statusCode) {
+            case 0: break;
+            default:
+                if (!result["api:statuscode"])
+                    throw Error("Unknown error")
+                const err = new Error(result["api:message"]);
+                err.name = result["api:statuscode"];
+                throw err;
+        }
 
         this.sid = result.sid;
         this.uid = result.account.uid;
@@ -64,7 +64,7 @@ class AminoClient {
         this.onLogged.map((onLogged) => {
             onLogged();
         })
-        return;
+        return result;
     }
 
     public async getCommunityCollectionSections(language_code: string, start: number, size: number): Promise<any> {
