@@ -5,7 +5,7 @@
   "main": "main_process.js",
   "scripts": {
     "build": "webpack",
-    "electron": "npm run build && electron ./build/main.js",
+    "electron": "set DEBUG=true && npm run build && electron ./build/main.js",
     "start": "webpack-dev-server --config webpack.config.js --inline --watch --port 8000"
   },
   "author": "fox@foxdev.io",

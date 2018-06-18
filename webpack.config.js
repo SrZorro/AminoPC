@@ -8,7 +8,7 @@ const transformInferno = require("ts-transform-inferno").default;
 module.exports = [
     Object.assign({
         target: "electron-main",
-        entry: "./app/electro/main.ts",
+        entry: "./src/main/main.ts",
         mode: "development",
         output: {
             path: path.resolve(__dirname, "build"),
@@ -29,7 +29,7 @@ module.exports = [
     }),
     Object.assign({
         target: "electron-renderer",
-        entry: "./app/src/App.tsx",
+        entry: "./src/renderer/App.tsx",
         mode: "development",
         output: {
             path: path.resolve(__dirname, "build"),
@@ -63,7 +63,7 @@ module.exports = [
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: "./app/src/index.html",
+                template: "./src/renderer/index.html",
                 inject: "body"
             }),
             new CleanWebpackPlugin(["build"], {

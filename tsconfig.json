@@ -21,7 +21,7 @@
 		"removeComments": false
 	},
 	"include": [
-		"app/**/*"
+		"src/**/*"
 	],
 	"exclude": [
 		"node_modules"
