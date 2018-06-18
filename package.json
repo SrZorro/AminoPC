@@ -1,28 +1,32 @@
 {
-  "name": "amino",
+  "name": "amino-pc",
   "version": "1.0.0",
-  "description": "",
-  "main": "main_process.js",
+  "description": "Amino unofficial PC version",
+  "main": "src/main/main.ts",
   "scripts": {
     "build": "webpack",
-    "electron": "set DEBUG=true && npm run build && electron ./build/main.js",
-    "start": "webpack-dev-server --config webpack.config.js --inline --watch --port 8000"
+    "electron": "electron ./build/main.js",
+    "package": "electron-packager build/ AminoPC --platform linux --arch x64 --out dist/ --overwrite",
+    "make": "electron-installer-debian --src dist/AminoPC-linux-x64/ --dest dist/installers/ --arch amd64",
+    "pipe": "npm run package; npm run make"
   },
   "author": "fox@foxdev.io",
   "license": "MIT",
   "dependencies": {
-    "@types/electron": "^1.6.10",
-    "@types/node": "^10.3.2",
-    "@types/uuid": "^3.4.3",
     "cross-fetch": "^2.2.1",
     "inferno": "^4.0.2",
     "ts-node": "^6.1.0",
     "typescript": "^2.9.1",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "electron": "^2.0.2"
   },
   "devDependencies": {
+    "@types/electron": "^1.6.10",
+    "@types/node": "^10.3.2",
+    "@types/uuid": "^3.4.3",
     "clean-webpack-plugin": "^0.1.17",
-    "electron": "2.0.2",
+    "electron-installer-debian": "^0.8.1",
+    "electron-packager": "^12.1.0",
     "html-webpack-plugin": "^3.2.0",
     "moment": "^2.22.2",
     "ts-loader": "^4.4.1",

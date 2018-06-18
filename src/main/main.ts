@@ -16,9 +16,7 @@ function onReady() {
 
   // mainWindow.setMenu(null);
 
-  console.log(__dirname)
-  // const fileName = `file://${__dirname}/index.html`
-  mainWindow.loadURL(process.env.DEBUG ? "http://localhost:8000" : path.join(__dirname, "..", "src", "index.html"))
+  mainWindow.loadURL(`file://${__dirname}/index.html`)
   mainWindow.on("close", () => app.quit())
 }
 
