@@ -6,10 +6,9 @@
   "scripts": {
     "build": "webpack",
     "electron": "electron ./build/main.js",
-    "package": "electron-packager build/ AminoPC --out dist/ --all --overwrite --icon logo.png",
-    "package:windows": "electron-packager build/ AminoPC -platform win32 --arch x64 --out dist/ --overwrite --icon=logo.ico",
-    "package:linux": "electron-packager build/ AminoPC --platform linux --arch x64 --out dist/ --overwrite --icon logo.png",
-    "make:windows": "node build_windows.js",
+    "package": "electron-packager build/ AminoPC --out dist/ --all --overwrite",
+    "package:windows": "electron-packager build/ AminoPC -platform win32 --arch ia32 --out dist/ --overwrite --icon=logo.ico",
+    "package:linux": "electron-packager build/ AminoPC --platform linux --arch x64 --out dist/ --overwrite",
     "make:linux": "electron-installer-debian --src dist/AminoPC-linux-x64/ --dest dist/installers/ --arch amd64",
     "pipe:linux": "npm run package:linux; npm run make:linux"
   },
