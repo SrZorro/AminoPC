@@ -37,7 +37,7 @@ const classKeypad = style({
     display: "flex",
     justifyContent: "flex-end",
     width: "100%"
-})
+});
 
 const classBtn = style({
     cursor: "pointer",
@@ -55,21 +55,21 @@ const classBtn = style({
             backgroundColor: "rgba(255, 255, 255, 0.15)"
         }
     }
-})
+});
 
 interface IFileDropProps {
-    observeDrop: string,
-    ndcId: number,
-    threadId: string
+    observeDrop: string;
+    ndcId: number;
+    threadId: string;
 }
 
 interface IFile {
-    lastModified: number,
-    lastModifiedDate: Date,
-    name: string,
-    path: string,
-    size: number,
-    type: string
+    lastModified: number;
+    lastModifiedDate: Date;
+    name: string;
+    path: string;
+    size: number;
+    type: string;
 }
 export default class FileDrop extends Component<any, any> {
     constructor(props: IFileDropProps, context) {
@@ -87,9 +87,9 @@ export default class FileDrop extends Component<any, any> {
             const file: IFile = evt.dataTransfer.files[0];
 
             if (["image/jpeg", "image/png", "image/gif", "audio/mp3", "audio/aac"].includes(file.type)) {
-                this.setState({ scene: "file_droped", file })
+                this.setState({ scene: "file_droped", file });
             } else {
-                this.setState({ scene: "file_failed", file })
+                this.setState({ scene: "file_failed", file });
             }
         }
     }
@@ -102,7 +102,7 @@ export default class FileDrop extends Component<any, any> {
         } else {
             fileDropElement.style.opacity = "0";
             fileDropContainerElement.style.pointerEvents = "none";
-            this.setState({ scene: "waiting_input" })
+            this.setState({ scene: "waiting_input" });
         }
     }
 
@@ -117,11 +117,11 @@ export default class FileDrop extends Component<any, any> {
         document.getElementsByClassName(this.props.observeDrop)[0].removeEventListener("dragleave", this.fileDrop.bind(this));
     }
 
-    private async sendMedia(cb: Function) {
+    private async sendMedia(cb: () => void) {
         const file = this.state.file as IFile;
         const bitmap = fs.readFileSync(file.path);
         const b64 = new Buffer(bitmap).toString("base64");
-        this.setState({ scene: "sending" })
+        this.setState({ scene: "sending" });
         console.log("sending...");
         await AminoClient.sendMediaInThread(this.props.ndcId, this.props.threadId, b64, file.type);
         console.log("Done");
@@ -137,7 +137,7 @@ export default class FileDrop extends Component<any, any> {
         switch (this.state.scene) {
             case "waiting_input":
                 content.push(<h1>Drag and drop files here to send it.</h1>);
-                content.push(<br />)
+                content.push(<br />);
                 content.push(<h3>{vTypes}</h3>);
                 break;
             case "file_droped": {
@@ -154,8 +154,8 @@ export default class FileDrop extends Component<any, any> {
                 break;
             case "file_failed":
                 fileDropContainerElement.style.pointerEvents = "all";
-                content.push(<h1>Sorry! I don't know that file type.</h1>)
-                content.push(<br />)
+                content.push(<h1>Sorry! I don't know that file type.</h1>);
+                content.push(<br />);
                 content.push(<h3>{vTypes}</h3>);
                 btnCancel = true;
                 break;
@@ -168,7 +168,7 @@ export default class FileDrop extends Component<any, any> {
                     content.push(<img style={{ width: "100%" }} src={file.path} />);
                 }
                 content.push(<br />);
-                content.push(<p>Sending media... Please wait.</p>)
+                content.push(<p>Sending media... Please wait.</p>);
             }
                 break;
             default:

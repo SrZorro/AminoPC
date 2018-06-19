@@ -8,7 +8,7 @@ const style = {
     width: "100%",
     height: "100%",
     backgroundColor: "#171814"
-}
+};
 
 export default class Amino extends Component<any, any> {
     constructor(props, context) {
@@ -22,7 +22,7 @@ export default class Amino extends Component<any, any> {
         this.setState({
             scene: "ThreadList",
             ndcId: joinedComs.communityList[0].ndcId
-        })
+        });
     }
 
     public changeScene(scene, args) {

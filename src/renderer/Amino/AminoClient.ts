@@ -3,27 +3,29 @@ import Endpoints from "./Endpoints";
 import { v4 as UUID } from "uuid";
 import * as AminoTypes from "./AminoTypes";
 
-type headers = { [key: string]: string };
+interface Iheaders { [key: string]: string; }
 
 declare global {
+    // tslint:disable-next-line
     interface String {
         format(...replacer: string[]): string;
     }
 }
-String.prototype.format = function () {
-    var a = this;
-    for (var k in arguments) {
-        a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
+String.prototype.format = function() {
+    let a = this;
+    for (const k in arguments) {
+        if (arguments.hasOwnProperty(k))
+            a = a.replace(new RegExp("\\{" + k + "\\}", "g"), arguments[k]);
     }
-    return a
-}
+    return a;
+};
 
 class AminoClient {
+    public isLogged: boolean;
+    public onLogged: Array<() => void>;
+    public uid: string;
     private sid: string;
     private deviceId: string;
-    public isLogged: boolean;
-    public onLogged: Function[];
-    public uid: string;
     constructor() {
         this.isLogged = false;
         this.onLogged = [];
@@ -32,13 +34,13 @@ class AminoClient {
     public async login(email: string, password: string, deviceId: string) {
         this.deviceId = deviceId;
         const body = {
-            email: email,
+            email,
             secret: `0 ${password}`,
             deviceID: deviceId,
             clientType: 100,
             action: "normal",
-            timestamp: Math.round((new Date).getTime() / 1000)
-        }
+            timestamp: Math.round((new Date()).getTime() / 1000)
+        };
 
         const result = await this.post(Endpoints.LOGIN, body, {
             "NDCDEVICEID": this.deviceId,
@@ -51,7 +53,7 @@ class AminoClient {
             case 0: break;
             default:
                 if (!result["api:statuscode"])
-                    throw Error("Unknown error")
+                    throw Error("Unknown error");
                 const err = new Error(result["api:message"]);
                 err.name = result["api:statuscode"];
                 throw err;
@@ -63,12 +65,12 @@ class AminoClient {
         this.isLogged = true;
         this.onLogged.map((onLogged) => {
             onLogged();
-        })
+        });
         return result;
     }
 
-    public async getCommunityCollectionSections(language_code: string, start: number, size: number): Promise<any> {
-        return await this.get(Endpoints.COMMUNITY_COLLECTION_SECTIONS.format(language_code, start.toString(), size.toString()));
+    public async getCommunityCollectionSections(languageCode: string, start: number, size: number): Promise<any> {
+        return await this.get(Endpoints.COMMUNITY_COLLECTION_SECTIONS.format(languageCode, start.toString(), size.toString()));
     }
 
     public async getJoinedCommunities(start: number, size: number): Promise<AminoTypes.JoinedCommunitiesInfo> {
@@ -99,44 +101,44 @@ class AminoClient {
     public async sendMessageInThread(ndcId: number, threadId: string, content: string): Promise<AminoTypes.AminoMessage> {
         const msg = await this.post(Endpoints.COMMUNITY_CHAT_SEND_MESSAGE.format(ndcId.toString(), threadId), {
             attachedObject: null,
-            content: content,
+            content,
             type: 0,
-            clientRefId: Math.round((new Date).getTime() / 1000),
-            timestamp: Math.round((new Date).getTime() / 1000)
+            clientRefId: Math.round((new Date()).getTime() / 1000),
+            timestamp: Math.round((new Date()).getTime() / 1000)
         }, {
                 "NDCDEVICEID": this.deviceId,
                 "NDCAUTH": `sid=${this.sid}`,
                 "NDC-MSG-SIG": this.getMessageSignature()
-            })
+            });
         return msg;
     }
     public async sendMediaInThread(ndcId: number, threadId: string, mediaB64: string, mediaType: string): Promise<AminoTypes.AminoMessage> {
         const body = {
             type: mediaType.includes("audio") ? 2 : 0,
-            clientRefId: Math.round((new Date).getTime() / 1000),
+            clientRefId: Math.round((new Date()).getTime() / 1000),
             mediaType: mediaType.includes("audio") ? 110 : 100,
             content: null,
             mediaUploadValue: mediaB64,
             attachedObject: null,
-            timestamp: Math.round((new Date).getTime() / 1000)
+            timestamp: Math.round((new Date()).getTime() / 1000)
         };
-        //Note: PNG support is kinda wroken, its converted to jpg and creates artefacts where transparency was located.
+        // Note: PNG support is kinda wroken, its converted to jpg and creates artefacts where transparency was located.
         if (mediaType.includes("image")) {
-            //@ts-ignore
-            body.mediaUhqEnabled = false; //High quality maybe? 
-            //@ts-ignore
+            // @ts-ignore
+            body.mediaUhqEnabled = false; // High quality maybe?
+            // @ts-ignore
             body.mediaUploadValueContentType = mediaType;
         }
 
         const msg = await this.post(Endpoints.COMMUNITY_CHAT_SEND_MESSAGE.format(ndcId.toString(), threadId), body, {
-            "NDCDEVICEID": this.deviceId,
-            "NDCAUTH": `sid=${this.sid}`
-        })
+            NDCDEVICEID: this.deviceId,
+            NDCAUTH: `sid=${this.sid}`
+        });
         return msg;
     }
 
     private async get(url: string) {
-        const headers: headers = {
+        const headers: Iheaders = {
             "NDCDEVICEID": this.deviceId,
             "NDCAUTH": `sid=${this.sid}`,
             "NDC-MSG-SIG": this.getMessageSignature(),
@@ -146,17 +148,17 @@ class AminoClient {
             "Sec-WebSocket-Key": "86iFBnuI8GWLlgWmSToY6g==",
             "Sec-WebSocket-Version": "13",
             "Accept-Encoding": "gzip"
-        }
+        };
         const response = await fetch(url, { method: "GET", headers });
         return await response.json();
     }
 
-    private async post(url: string, body: object, headers?: headers) {
-        const default_headers: headers = {
-            "NDCDEVICEID": this.deviceId,
-            "NDCAUTH": `sid=${this.sid}`
-        }
-        const response = await fetch(url, { method: "POST", headers: headers ? headers : default_headers, body: JSON.stringify(body) });
+    private async post(url: string, body: object, headers?: Iheaders) {
+        const defaultHeaders: Iheaders = {
+            NDCDEVICEID: this.deviceId,
+            NDCAUTH: `sid=${this.sid}`
+        };
+        const response = await fetch(url, { method: "POST", headers: headers ? headers : defaultHeaders, body: JSON.stringify(body) });
         const json = await response.json();
         return { ...json, response };
     }

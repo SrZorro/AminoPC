@@ -35,6 +35,7 @@
     "moment": "^2.22.2",
     "ts-loader": "^4.4.1",
     "ts-transform-inferno": "^2.2.0",
+    "tslint": "^5.10.0",
     "typestyle": "^2.0.1",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.3",

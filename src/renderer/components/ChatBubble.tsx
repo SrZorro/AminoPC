@@ -9,7 +9,7 @@ const classMain = style({
     minHeight: 35,
     display: "flex",
     overflow: "auto"
-})
+});
 
 const classLeft = style({
     width: 56,
@@ -17,20 +17,20 @@ const classLeft = style({
     display: "flex",
     paddingBottom: 6,
     justifyContent: "space-around"
-})
+});
 const classRight = style({
     width: "calc(100% - 56px)",
     marginRight: 10,
     float: "right",
-    paddingBottom: 4,
-})
+    paddingBottom: 4
+});
 
 const classProfile = style({
     width: 33,
     height: 33,
     borderRadius: "50%",
     alignSelf: "flex-end"
-})
+});
 
 const classBubble = style({
     borderRadius: 5,
@@ -49,13 +49,13 @@ const classBubble = style({
             }
         }
     }
-})
+});
 
 const classBubbleLeft = style({
     backgroundColor: "#171814",
     marginRight: 15,
     boxShadow: "0px 2px 0px 0px #343937"
-})
+});
 const classBubbleLeftArrow = style({
     $nest: {
         "&::after": {
@@ -69,14 +69,14 @@ const classBubbleLeftArrow = style({
             borderLeft: "10px solid transparent"
         }
     }
-})
+});
 
 const classBubbleRight = style({
     backgroundColor: "#3B3C38",
     boxShadow: "0px 2px 0px 0px #2C4F2B",
     float: "right",
     marginRight: "0 !important"
-})
+});
 const classBubbleRightArrow = style({
     $nest: {
         "&::after": {
@@ -90,19 +90,19 @@ const classBubbleRightArrow = style({
             borderRight: "10px solid transparent"
         }
     }
-})
+});
 
 const classUsername = style({
     color: "#CE6718",
     fontWeight: "bold"
-})
+});
 
 const classParagraph = style({
-})
+});
 
 const classPicture = style({
     width: "100%"
-})
+});
 
 const classTime = style({
     color: "#717D85",
@@ -110,13 +110,13 @@ const classTime = style({
     marginTop: 4,
     float: "right",
     fontSize: "0.8em"
-})
+});
 
 interface IChatBubbleProps {
-    aminoMessage: AminoMessage,
-    left?: boolean,
-    displayProfile?: boolean,
-    displayName?: boolean
+    aminoMessage: AminoMessage;
+    left?: boolean;
+    displayProfile?: boolean;
+    displayName?: boolean;
 }
 
 export default class ChatBubble extends Component<any, any> {
@@ -140,13 +140,13 @@ export default class ChatBubble extends Component<any, any> {
         const ctx: HTMLElement[] = [];
 
         if (this.props.displayName)
-            ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>)
+            ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>);
 
-        //ToDo - Handle user joined chat
+        // ToDo - Handle user joined chat
         // type: 101
 
         if (this.props.aminoMessage.content)
-            this.props.aminoMessage.content.split("\n").map(line => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>))
+            this.props.aminoMessage.content.split("\n").map((line) => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>));
 
         if (this.props.aminoMessage.mediaValue) {
             switch (this.props.aminoMessage.mediaType) {
@@ -156,17 +156,17 @@ export default class ChatBubble extends Component<any, any> {
                         ctx.push(<img class={classPicture} src={this.props.aminoMessage.mediaValue} />);
                     break;
                 case 103:
-                    //ToDo - Fix width
+                    // ToDo - Fix width
                     ctx.push(<iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe>);
                     break;
                 case 110:
-                    //ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
+                    // ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
                     ctx.push(<audio controls><source src={this.props.aminoMessage.mediaValue} type="audio/aac" /></audio>);
                     break;
             }
         }
 
-        ctx.push(<p style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>)
+        ctx.push(<p style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>);
         return (
             <div class={classMain}>
                 <div class={classLeft}>
