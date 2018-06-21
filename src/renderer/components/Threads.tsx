@@ -100,6 +100,7 @@ export default class Threads extends Component<any, any> {
         if (this.state.isHovering) classes += " " + mainHover;
         return (
             <div className={classes} onMouseEnter={() => { this.setState({ isHovering: true }); }} onMouseLeave={() => { this.setState({ isHovering: false }); }}>
+                {this.state.joinedThreadList.length === 0 ? <h1 style={{color: "white"}}>Loading chats...</h1> : null}
                 {this.state.joinedThreadList.map((thread) => {
                     return ([
                         <ThreadElement thread={thread} onClick={this.openThread.bind(this)} />

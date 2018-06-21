@@ -186,6 +186,8 @@ export default class ThreadChat extends Component<any, any> {
                 if (prevMessage !== null && prevMessage.author.uid === message.author.uid)
                     return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} />);
             });
+        else
+            chatBubbles.push(<h1 style={{ color: "white" }}>Loading messages...</h1>);
 
         return (
             <div class={classMain}>
