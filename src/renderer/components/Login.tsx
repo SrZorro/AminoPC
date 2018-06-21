@@ -1,6 +1,6 @@
 import { Component } from "inferno";
 import { style } from "typestyle";
-import AminoClient from "../Amino";
+import AminoClient from "aminoclient";
 
 const main = style({
     padding: "15%",

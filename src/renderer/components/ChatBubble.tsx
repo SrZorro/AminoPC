@@ -1,4 +1,4 @@
-import { AminoMessage } from "../Amino/AminoTypes";
+import { IAminoMessage } from "aminoclient/dist/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
 import moment from "moment";
@@ -113,7 +113,7 @@ const classTime = style({
 });
 
 interface IChatBubbleProps {
-    aminoMessage: AminoMessage;
+    aminoMessage: IAminoMessage;
     left?: boolean;
     displayProfile?: boolean;
     displayName?: boolean;

@@ -1,5 +1,5 @@
-import AminoClient from "../Amino";
-import { AminoMessage } from "../Amino/AminoTypes";
+import AminoClient from "aminoclient";
+import { IAminoMessage } from "aminoclient/dist/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
 import ChatBubble from "./ChatBubble";
@@ -173,9 +173,9 @@ export default class ThreadChat extends Component<any, any> {
         // type: 0   | mediaType: 100 = Picture
         // type: 3   | mediaType: 113 = Sticker
         if (this.state.threadMessages !== null)
-            this.state.threadMessages.forEach((message: AminoMessage, index, messages) => {
-                const prevMessage: AminoMessage | null = index <= 0 ? null : messages[index - 1];
-                const nextMessage: AminoMessage | null = index >= messages.length - 1 ? null : messages[index + 1];
+            this.state.threadMessages.forEach((message: IAminoMessage, index, messages) => {
+                const prevMessage: IAminoMessage | null = index <= 0 ? null : messages[index - 1];
+                const nextMessage: IAminoMessage | null = index >= messages.length - 1 ? null : messages[index + 1];
 
                 if ((prevMessage !== null && prevMessage.author.uid !== message.author.uid) && (nextMessage === null || message.author.uid !== nextMessage.author.uid))
                     return chatBubbles.push(<ChatBubble aminoMessage={message} left={AminoClient.uid !== message.author.uid} displayName displayProfile />);

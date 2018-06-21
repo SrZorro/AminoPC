@@ -1,7 +1,7 @@
 import { Component } from "inferno";
 import { style } from "typestyle";
 import ThreadElement from "./ThreadElement";
-import AminoClient from "../Amino";
+import AminoClient from "aminoclient";
 
 const main = style({
     width: "100%",

@@ -1,4 +1,4 @@
-import AminoClient from "../Amino";
+import AminoClient from "aminoclient";
 import { Component } from "inferno";
 import Threads from "./Threads";
 import ThreadChat from "./ThreadChat";
@@ -33,11 +33,11 @@ export default class Amino extends Component<any, any> {
         let display = <div style={{ color: "white", fontSize: "2em" }}>Loading...</div>;
 
         if (this.state.scene === "login") {
-            display = <Login onLogged={this.onLogged.bind(this)} />
+            display = <Login onLogged={this.onLogged.bind(this)} />;
         }
 
         if (this.state.scene === "ThreadList" && this.state.ndcId !== null) {
-            display = <Threads ndcId={this.state.ndcId} changeScene={this.changeScene.bind(this)} />
+            display = <Threads ndcId={this.state.ndcId} changeScene={this.changeScene.bind(this)} />;
         }
 
         if (this.state.scene === "ThreadChat" && this.state.threadId !== null) {

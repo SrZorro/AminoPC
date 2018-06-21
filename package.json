@@ -5,6 +5,7 @@
   "main": "src/main/main.ts",
   "scripts": {
     "build": "webpack",
+    "watch": "webpack --watch",
     "electron": "electron ./build/main.js",
     "package": "electron-packager build/ AminoPC --out dist/ --all --overwrite",
     "package:windows": "electron-packager build/ AminoPC -platform win32 --arch ia32 --out dist/ --overwrite --icon=logo.ico",
@@ -15,6 +16,7 @@
   "author": "fox@foxdev.io",
   "license": "MIT",
   "dependencies": {
+    "aminoclient": "^1.0.5",
     "cross-fetch": "^2.2.1",
     "electron": "^2.0.2",
     "electron-webpack": "^2.1.2",

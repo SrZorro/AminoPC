@@ -1,4 +1,4 @@
-import AminoClient from "../Amino";
+import AminoClient from "aminoclient";
 import * as fs from "fs";
 import { Component } from "inferno";
 import { style } from "typestyle";
