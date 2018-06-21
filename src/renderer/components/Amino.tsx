@@ -3,6 +3,7 @@ import { Component } from "inferno";
 import Threads from "./Threads";
 import ThreadChat from "./ThreadChat";
 import Login from "./Login";
+import Communities from "./Communities";
 
 const style = {
     width: "100%",
@@ -34,6 +35,10 @@ export default class Amino extends Component<any, any> {
 
         if (this.state.scene === "login") {
             display = <Login onLogged={this.onLogged.bind(this)} />;
+        }
+
+        if (this.state.scene === "CommunityList") {
+            display = <Communities />;
         }
 
         if (this.state.scene === "ThreadList" && this.state.ndcId !== null) {
