@@ -23,7 +23,7 @@
     "url": "https://github.com/SrZorro/AminoPC"
   },
   "dependencies": {
-    "aminoclient": "^1.0.5",
+    "aminoclient": "^1.0.6",
     "cross-fetch": "^2.2.1",
     "electron": "^2.0.2",
     "electron-webpack": "^2.1.2",
