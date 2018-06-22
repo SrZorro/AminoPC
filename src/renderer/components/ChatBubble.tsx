@@ -2,6 +2,7 @@ import { IAminoMessage } from "aminoclient/dist/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
 import moment from "moment";
+// import AudioBubble from "./bubbles/AudioBubble";
 
 const classMain = style({
     width: "100%",
@@ -162,6 +163,8 @@ export default class ChatBubble extends Component<any, any> {
                 case 110:
                     // ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
                     ctx.push(<audio controls><source src={this.props.aminoMessage.mediaValue} type="audio/aac" /></audio>);
+                    // Stoped AudioBubble development till grid system is implemented
+                    // ctx.push(<AudioBubble src={this.props.aminoMessage.mediaValue} />);
                     break;
             }
         }
