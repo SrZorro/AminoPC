@@ -9,9 +9,17 @@
     "publish": "build -p always",
     "electron": "electron ./dist/webpack/main.js"
   },
-  "author": "fox@foxdev.io",
+  "author": "Marc 'Fox' Salva Montaner <fox@foxdev.io>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SrZorro/AminoPC/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SrZorro/AminoPC"
+  },
   "dependencies": {
+    "aminoclient": "^1.0.6",
     "cross-fetch": "^2.2.1",
     "electron-updater": "^2.21.10",
     "inferno": "^4.0.2",
