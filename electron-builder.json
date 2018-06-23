@@ -1,0 +1,18 @@
+{
+    "appId": "io.foxdev.aminopc",
+    "productName": "Amino PC",
+    "directories": {
+        "buildResources": "build",
+        "output": "dist/build",
+        "app": "dist/webpack"
+    },
+    "win": {
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "SrZorro",
+                "repo": "AminoPC"
+            }
+        ]
+    }
+}

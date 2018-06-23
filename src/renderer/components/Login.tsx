@@ -1,6 +1,7 @@
 import { Component } from "inferno";
 import { style } from "typestyle";
 import AminoClient from "../Amino";
+const version = eval(`require("./package.json").version`);
 
 const main = style({
     padding: "15%",
@@ -203,6 +204,7 @@ export default class Amino extends Component<any, any> {
                         </div>
                         <button class={classButton} onclick={this.tryLogin.bind(this)}>Login</button>
                         <label style={{ color: "#CFCFCE" }}><input defaultChecked={this.state.saveCredentials} onchange={(evt) => this.setState({ saveCredentials: evt.target.checked })} type="checkbox" /> Remember credentials?</label>
+                        <p style={{ color: "#CFCFCE", fontSize: "0.9em" }}>Unofficial Amino PC version {version}</p>
                     </div>
                 );
             case "waiting":
