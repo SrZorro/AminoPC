@@ -1,7 +1,6 @@
-// const webpack = require("webpack");
-// const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const LiveReloadPlugin = require("webpack-livereload-plugin");
 
 const path = require("path");
 const transformInferno = require("ts-transform-inferno").default;
@@ -69,7 +68,10 @@ module.exports = [
             }),
             new CopyWebpackPlugin([{
                 from: "package.json", to: "."
-            }])
+            }]),
+            new LiveReloadPlugin({
+                appendScriptTag: true
+            })
             // new CleanWebpackPlugin(["build"], {
             //     verbose: true
             // }),

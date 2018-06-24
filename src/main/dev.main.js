@@ -1,7 +1,9 @@
-import { autoUpdater } from "electron-updater";
-import { app, BrowserWindow } from "electron";
-declare var __dirname: string;
-let mainWindow: Electron.BrowserWindow;
+const autoUpdater = require("electron-updater").autoUpdater;
+const electron = require("electron");
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+
+let mainWindow;
 
 function onReady() {
     mainWindow = new BrowserWindow({
@@ -12,11 +14,11 @@ function onReady() {
         webPreferences: {
             webSecurity: false
         }
-    }); 
+    });
 
     // mainWindow.setMenu(null);
 
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadURL("http://127.0.0.1:3000");
     mainWindow.on("close", () => app.quit());
     autoUpdater.checkForUpdatesAndNotify();
 }

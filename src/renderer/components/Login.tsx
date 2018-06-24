@@ -143,7 +143,6 @@ export default class Amino extends Component<any, any> {
     constructor(props, context) {
         super(props, context);
         this.state = { scene: "login", errMsg: "", saveCredentials: localStorage.getItem("deviceID") ? true : false };
-        console.log(localStorage.getItem("password") || "");
         this.defaultPassword = localStorage.getItem("password") || "";
         this.defaultEmail = localStorage.getItem("email") || "";
         this.defaultDeviceID = localStorage.getItem("deviceID") || "";
