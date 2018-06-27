@@ -19,10 +19,15 @@ export default class Amino extends Component<any, any> {
 
     private async onLogged() {
         console.log("Logged, Requesting joined coms");
-        const joinedComs = await AminoClient.getJoinedCommunities(0, 10);
+        this.setState({
+            scene: "CommunityList"
+        });
+    }
+
+    private async OnEnterCommunity(ndcId: number) {
         this.setState({
             scene: "ThreadList",
-            ndcId: joinedComs.communityList[0].ndcId
+            ndcId: ndcId
         });
     }
 
@@ -38,7 +43,7 @@ export default class Amino extends Component<any, any> {
         }
 
         if (this.state.scene === "CommunityList") {
-            display = <Communities />;
+            display = <Communities onEnter={this.OnEnterCommunity.bind(this)} />;
         }
 
         if (this.state.scene === "ThreadList" && this.state.ndcId !== null) {
