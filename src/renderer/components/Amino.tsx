@@ -1,4 +1,5 @@
 import AminoClient from "aminoclient";
+import AminoTypes from "aminoclient/dist/AminoTypes";
 import { Component } from "inferno";
 import Threads from "./Threads";
 import ThreadChat from "./ThreadChat";
@@ -17,17 +18,18 @@ export default class Amino extends Component<any, any> {
         this.state = { ndcId: null, threadId: null, scene: "login" };
     }
 
-    private async onLogged() {
+    private async onLogged(account: AminoTypes.IAminoAccount) {
         console.log("Logged, Requesting joined coms");
         this.setState({
-            scene: "CommunityList"
+            scene: "CommunityList",
+            account
         });
     }
 
     private async OnEnterCommunity(ndcId: number) {
         this.setState({
             scene: "ThreadList",
-            ndcId: ndcId
+            ndcId
         });
     }
 
@@ -36,14 +38,16 @@ export default class Amino extends Component<any, any> {
     }
 
     public render() {
-        let display = <div style={{ color: "white", fontSize: "2em" }}>Loading...</div>;
+        let display: Element = <div></div>;
+        if (this.state.scene === "loading")
+            display = <div style={{ color: "white", fontSize: "2em" }}>Loading...</div>;
 
         if (this.state.scene === "login") {
             display = <Login onLogged={this.onLogged.bind(this)} />;
         }
 
         if (this.state.scene === "CommunityList") {
-            display = <Communities onEnter={this.OnEnterCommunity.bind(this)} />;
+            display = <Communities accountInfo={this.state.account} onEnter={this.OnEnterCommunity.bind(this)} />;
         }
 
         if (this.state.scene === "ThreadList" && this.state.ndcId !== null) {

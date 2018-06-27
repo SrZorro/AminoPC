@@ -1,7 +1,7 @@
 import { Component } from "inferno";
 import { style } from "typestyle";
 import AminoClient from "aminoclient";
-const version = eval(`require("./package.json").version`);
+const version = "1.0.0"; // eval(`require("./package.json").version`) Evaling and requiring, eh... No, I have to think about this
 
 const main = style({
     padding: "15%",
@@ -169,7 +169,7 @@ export default class Amino extends Component<any, any> {
                 localStorage.removeItem("email");
                 localStorage.removeItem("deviceID");
             }
-            this.props.onLogged();
+            this.props.onLogged(response.account);
         } catch (e) {
             this.setState({ scene: "error", errMsg: e.name === 218 ? "Wrong DeviceID, click the ? to know how to get a valid DeviceID" : e.message });
         }
