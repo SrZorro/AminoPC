@@ -49,8 +49,8 @@ const accountNickname = style({
 const communitiesContainer = style({
     width: "100%",
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, 200px)",
-    gridTemplateRows: "repeat(auto-fit, 300px)",
+    gridTemplateColumns: "repeat(auto-fit, 150px)",
+    gridTemplateRows: "repeat(auto-fit, 225px)",
     gridColumnGap: 24,
     gridRowGap: 27,
     justifyContent: "space-evenly",
@@ -59,8 +59,8 @@ const communitiesContainer = style({
 });
 
 const communityBlock = style({
-    width: "200px",
-    height: "300px",
+    width: "150px",
+    height: "225px",
     backgroundSize: "cover",
     backgroundPositionX: "center",
     cursor: "pointer",
