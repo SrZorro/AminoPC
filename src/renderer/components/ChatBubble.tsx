@@ -2,6 +2,7 @@ import { IAminoMessage } from "aminoclient/dist/AminoTypes";
 import { Component } from "inferno";
 import { style } from "typestyle";
 import moment from "moment";
+import Paragraph from "./bubbles/Paragraph";
 // import AudioBubble from "./bubbles/AudioBubble";
 
 const classMain = style({
@@ -34,22 +35,16 @@ const classProfile = style({
 });
 
 const classBubble = style({
+    width: "fit-content",
     borderRadius: 5,
     marginRight: 15,
     padding: "5px 5px 7px 10px",
-    minHeight: 33 - 5 - 10,
-    display: "table-cell",
     verticalAlign: "middle",
     paddingRight: 10,
-    $nest: {
-        p: {
-            $nest: {
-                "&:nth-last-of-type(2)": {
-                    float: "left"
-                }
-            }
-        }
-    }
+    display: "grid",
+    gridTemplateColumns: "fit-content(100%) 61px",
+    gridTemplateRows: "auto auto auto",
+    gridTemplateAreas: `"nickname reply" "message message" ". clock"`
 });
 
 const classBubbleLeft = style({
@@ -94,11 +89,22 @@ const classBubbleRightArrow = style({
 });
 
 const classUsername = style({
+    gridArea: "nickname",
     color: "#CE6718",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    whiteSpace: "nowrap"
 });
 
-const classParagraph = style({
+const classReply = style({
+    gridArea: "reply",
+    justifySelf: "right",
+    color: "#717D85",
+    float: "right",
+    fontSize: "0.8em"
+});
+
+const classMsgContainer = style({
+    gridArea: "message"
 });
 
 const classPicture = style({
@@ -106,6 +112,7 @@ const classPicture = style({
 });
 
 const classTime = style({
+    gridArea: "clock",
     color: "#717D85",
     marginLeft: 5,
     marginTop: 4,
@@ -126,6 +133,36 @@ export default class ChatBubble extends Component<any, any> {
         this.state = { thread: null };
     }
 
+    private generateBubbleContent(): HTMLElement[] {
+        const content: HTMLElement[] = [];
+        // ToDo - Handle user joined chat
+        // type: 101
+
+        if (this.props.aminoMessage.content)
+            this.props.aminoMessage.content.split("\n").map((line) => content.push(line.length === 0 ? <br /> : <Paragraph>{line}</Paragraph>));
+
+        if (this.props.aminoMessage.mediaValue) {
+            switch (this.props.aminoMessage.mediaType) {
+                case 113:
+                case 100:
+                    if (!this.props.aminoMessage.mediaValue.includes("ndcsticker://"))
+                        content.push(<img class={classPicture} src={this.props.aminoMessage.mediaValue} />);
+                    break;
+                case 103:
+                    // ToDo - Fix width
+                    content.push(<iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe>);
+                    break;
+                case 110:
+                    // ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
+                    content.push(<audio controls><source src={this.props.aminoMessage.mediaValue} type="audio/aac" /></audio>);
+                    // Stoped AudioBubble development till grid system is implemented
+                    // ctx.push(<AudioBubble src={this.props.aminoMessage.mediaValue} />);
+                    break;
+            }
+        }
+        return content;
+    }
+
     public render() {
         const mountClassBuble: string[] = [];
         mountClassBuble.push(classBubble);
@@ -138,38 +175,16 @@ export default class ChatBubble extends Component<any, any> {
         if (!this.props.left)
             mountClassBuble.push(classBubbleRightArrow);
 
-        const ctx: HTMLElement[] = [];
+        const bubbleContent: HTMLElement[] = [];
 
-        if (this.props.displayName)
-            ctx.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>);
-
-        // ToDo - Handle user joined chat
-        // type: 101
-
-        if (this.props.aminoMessage.content)
-            this.props.aminoMessage.content.split("\n").map((line) => line.length === 0 ? ctx.push(<br />) : ctx.push(<p class={classParagraph}>{line}</p>));
-
-        if (this.props.aminoMessage.mediaValue) {
-            switch (this.props.aminoMessage.mediaType) {
-                case 113:
-                case 100:
-                    if (!this.props.aminoMessage.mediaValue.includes("ndcsticker://"))
-                        ctx.push(<img class={classPicture} src={this.props.aminoMessage.mediaValue} />);
-                    break;
-                case 103:
-                    // ToDo - Fix width
-                    ctx.push(<iframe width="560" height="315" src={`https://www.youtube-nocookie.com/embed/${this.props.aminoMessage.mediaValue.replace("ytv://", "")}?rel=0&amp;showinfo=0`} frameborder="0" allow="encrypted-media" allowfullscreen={false}></iframe>);
-                    break;
-                case 110:
-                    // ToDo - Add style from https://codepen.io/gregh/pen/NdVvbm
-                    ctx.push(<audio controls><source src={this.props.aminoMessage.mediaValue} type="audio/aac" /></audio>);
-                    // Stoped AudioBubble development till grid system is implemented
-                    // ctx.push(<AudioBubble src={this.props.aminoMessage.mediaValue} />);
-                    break;
-            }
+        if (this.props.displayName) {
+            bubbleContent.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>);
+            bubbleContent.push(<p class={classReply}>Reply</p>);
         }
 
-        ctx.push(<p style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>);
+        bubbleContent.push(<div class={classMsgContainer}>{...this.generateBubbleContent()}</div>);
+
+        bubbleContent.push(<p title={moment(this.props.aminoMessage.createdTime).format("dddd, DD MMMM YYYY, h:mm a")} style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>);
         return (
             <div class={classMain}>
                 <div class={classLeft}>
@@ -177,7 +192,7 @@ export default class ChatBubble extends Component<any, any> {
                 </div>
                 <div class={classRight}>
                     <div class={mountClassBuble.join(" ")}>
-                        {ctx}
+                        {bubbleContent}
                     </div>
                 </div>
             </div>
