@@ -13,14 +13,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add thread name in header.
 - Add thread info section where you can see the users in this thread and also leave.
 - Overhaul textbox in thread.
-- Display correctly special syntax flavor [B]old [I]talic [C]enter [U]nderline [S]trikeout.
-- Migrate chat bubbles from float based to grid.
 - Move chat bubble elements to his own components.
 
 ## [Unreleased]
 ### Added
-- Community selector
-
+- Community selector.
+- Special syntax flavor [B]old [I]talic [C]enter [U]nderline [S]trikeout.
+- Migrated chat bubbles from float to grid.
 
 ## [1.0.6] - 2018-06-21
 ### Added
