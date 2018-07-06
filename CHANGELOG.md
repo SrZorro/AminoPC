@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add thread info section where you can see the users in this thread and also leave.
 - Overhaul textbox in thread.
 - Move chat bubble elements to his own components.
+- Option to return to the community selector without restarting the app.
+- Quick reply option (Aka copy the text of the message and add a line jump).
+- Stop gifs when app is not in focus.
+- Styles support.
+- Add inline bot support @gif, @youtube, @myinstants etc.
+- Add emoji replacer support :cake: :fox: :heart: etc.
+- Add stickers support.
 
 ## [Unreleased]
 ### Added

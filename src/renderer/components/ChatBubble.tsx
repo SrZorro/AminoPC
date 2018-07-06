@@ -53,18 +53,18 @@ const classBubbleLeft = style({
     boxShadow: "0px 2px 0px 0px #343937"
 });
 const classBubbleLeftArrow = style({
-    $nest: {
-        "&::after": {
-            content: "''",
-            float: "left",
-            transform: "translate(-17px, 7px)",
-            boxShadow: "0px 2px 0px 0px #343937",
-            width: 0,
-            height: 0,
-            borderBottom: "10px solid #171814",
-            borderLeft: "10px solid transparent"
-        }
-    }
+    // $nest: {
+    //     "&::after": {
+    //         content: "''",
+    //         float: "left",
+    //         transform: "translate(-17px, 7px)",
+    //         boxShadow: "0px 2px 0px 0px #343937",
+    //         width: 0,
+    //         height: 0,
+    //         borderBottom: "10px solid #171814",
+    //         borderLeft: "10px solid transparent"
+    //     }
+    // }
 });
 
 const classBubbleRight = style({
@@ -74,18 +74,18 @@ const classBubbleRight = style({
     marginRight: "0 !important"
 });
 const classBubbleRightArrow = style({
-    $nest: {
-        "&::after": {
-            content: "''",
-            float: "right",
-            transform: "translate(69px, 19px)",
-            boxShadow: "0px 2px 0px 0px #2C4F2B",
-            width: 0,
-            height: 0,
-            borderBottom: "10px solid #3B3C38",
-            borderRight: "10px solid transparent"
-        }
-    }
+    // $nest: {
+    //     "&::after": {
+    //         content: "''",
+    //         float: "right",
+    //         transform: "translate(69px, 19px)",
+    //         boxShadow: "0px 2px 0px 0px #2C4F2B",
+    //         width: 0,
+    //         height: 0,
+    //         borderBottom: "10px solid #3B3C38",
+    //         borderRight: "10px solid transparent"
+    //     }
+    // }
 });
 
 const classUsername = style({
@@ -104,12 +104,24 @@ const classReply = style({
 });
 
 const classMsgContainer = style({
-    gridArea: "message"
+    gridArea: "message",
+    $nest: {
+        p: {
+            $nest: {
+                "&:nth-last-of-type(2)": {
+                    float: "left"
+                }
+            }
+        }
+    }
 });
 
 const classPicture = style({
     width: "100%"
 });
+
+// @ts-ignore
+window.clock = "0.8em";
 
 const classTime = style({
     gridArea: "clock",
@@ -117,7 +129,8 @@ const classTime = style({
     marginLeft: 5,
     marginTop: 4,
     float: "right",
-    fontSize: "0.8em"
+    // @ts-ignore
+    fontSize: window.clock
 });
 
 interface IChatBubbleProps {
@@ -177,14 +190,15 @@ export default class ChatBubble extends Component<any, any> {
 
         const bubbleContent: HTMLElement[] = [];
 
-        if (this.props.displayName) {
+        if (this.props.displayName && this.props.left) {
             bubbleContent.push(<p class={classUsername}>{this.props.aminoMessage.author.nickname}</p>);
             bubbleContent.push(<p class={classReply}>Reply</p>);
         }
 
-        bubbleContent.push(<div class={classMsgContainer}>{...this.generateBubbleContent()}</div>);
+        const time = <p title={moment(this.props.aminoMessage.createdTime).format("dddd, DD MMMM YYYY, h:mm a")} style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>;
 
-        bubbleContent.push(<p title={moment(this.props.aminoMessage.createdTime).format("dddd, DD MMMM YYYY, h:mm a")} style={this.props.aminoMessage.mediaValue ? { marginTop: 0 } : null} class={classTime}>{moment(this.props.aminoMessage.createdTime).format("LT")}</p>);
+        bubbleContent.push(<div class={classMsgContainer}>{...this.generateBubbleContent()}{time}</div>);
+
         return (
             <div class={classMain}>
                 <div class={classLeft}>
